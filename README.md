@@ -3,14 +3,14 @@ This repository contains a Machine Learning-based web application that predicts 
 
 
 ## 📋 **Table of Contents**
-- [Project Overview](PROJECTOVERVIEW)
-- [Tech Stack](TECHSTACK)
-- [How It Works](HOWITWORKS)
-- [Installation](INSTALLATION)
-- [Usage](USAGE)
-- [Folder Structure](FOLDERSTRUCTURE)
-- [Demo](DEMO)
-- [License](LICENSE)
+- [Project Overview](#project-overview)
+- [Tech Stack](#tech-stack)
+- [How It Works](#how-it-works)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Folder Structure](#folder-structure)
+- [Demo](#demo)
+- [License](#license)
 
 
 ## 🏆 **Project Overview**
