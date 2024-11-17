@@ -1,0 +1,80 @@
+import numpy as np
+import pandas as pd
+
+dataset = pd.read_csv('/content/kaggle_movie_train.csv')
+
+dataset.head()
+dataset.isna().sum()
+dataset['genre'].unique()
+
+encode_genre = {'thriller':0, 'comedy':1, 'drama':2, 'action':3, 'sci-fi':4, 'other':5, 'romance':6, 'horror':7, 'adventure':8}
+dataset['genre'] =  dataset['genre'].map(encode_genre)
+dataset.head()
+
+import re
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+dataset['text'][0]
+re.sub(pattern='[^a-zA-Z]', repl=' ', string=dataset['text'][0])
+
+for i in range(0, dataset.shape[0]):
+  text = re.sub(pattern='[^a-zA-Z]', repl=' ', string=dataset['text'][i])
+  text = text.lower()
+  words = text.split()
+  cleaned_words = [word for word in words if word not in set(stopwords.words('english'))]
+  ps = PorterStemmer()
+  words = [ps.stem(word) for word in cleaned_words]
+  text = ' '.join(words)
+  courpus.append(text)
+  courpus[0]
+
+#creating the bag of words mode1
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features=1000 , ngram_range=(1,2))
+X = cv.fit_transform(courpus).toarray()
+y = dataset['genre'].values
+
+# Check if the number of samples in X and y are equal
+if X.shape[0] != len(y):
+    print("Error: The number of samples in X and y are inconsistent!")
+else:
+    print("The number of samples in X and y are consistent.")
+
+print(len(courpus))  # Length of corpus (input text)
+print(len(dataset['genre']))  # Length of target labels
+
+print(dataset.isnull().sum())  # Check for missing values in the dataset
+dataset.dropna(subset=['genre'], inplace=True)
+
+X = X[:len(y)]
+
+courpus = dataset['text']  # Ensure correct corpus
+y = dataset['genre']  # Correct target labels
+X = cv.fit_transform(courpus).toarray()
+from sklearn.model_selection import train_test_split
+
+# Split the dataset into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+from sklearn.naive_bayes import MultinomialNB
+classifier = MultinomialNB(alpha = 0.1)
+classifier.fit(x_train, y_train)
+
+y_pred = classifier.predict(x_test)
+y_pred
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+cm
+
+import seaborn as sns
+sns.heatmap(cm, annot=True)
+
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, y_pred)
+
+import pickle
+pickle.dump(cv , open('cv.pkl', 'wb'))
+pickle.dump(classifier, open('model.pkl', 'wb'))
